@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<link href="//vjs.zencdn.net/4.5/video-js.css" rel="stylesheet">
+<script src="//vjs.zencdn.net/4.5/video.js"></script>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+</head>
+<body>
+  <form method="get">
+      <input type='submit' class = 'button' value ='Click' name='btn'>
+   </form>
+
+
+<div class="video-js-box"> 
+ <video  id="vod" class="video-js vjs-default-skin" >
+  </video>
+  
+ <script type="text/javascript" charset="utf-8"> 
+  var myPlayer =videojs("vod",
+     {"controls":true, 
+     "autoplay":'muted', 
+     "preload":"auto",
+     "poster":"C:\\Users\\InKunAhn\\djangoPractice\\fvd\\drowsiness\\example.jpg",
+     "loop":"false",
+     "width":600,
+     "height":400
+     });
+  myPlayer.requestFullScreen();
+
+  videojs("vod").ready(function(){
+   myPlayer.src({ type: "video/mp4", src: "C:\\Users\\InKunAhn\\djangoPractice\\fvd\\drowsiness\\example.mp4" });
+   });
+  var onPlay = function(){
+   console.info("on Play");
+  };
+  myPlayer.on("play",onPlay);
+ </script>
+</div>
+</body>

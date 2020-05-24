@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+	<title>Video Streaming Demonstration</title>
+	
+	<style>
+		body {padding:0px; margin:0px;}
+
+		#divPosition{
+			background-color: :#00d8ff;
+			border:1px soild #5d5d5d;
+			position: absolute;
+			height: 300px;
+			widows: 400px;
+			margin:-150px 0px 0px -200px;
+			top: 50%;
+			left: 50%;
+			padding: 5px;
+		}
+	</style>
+  </head>
+  <body>
+  	<!-- <iframe width="560" height="315" src="{% static "example.mp4" %}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+  		
+	  </iframe> -->
+	
+	<div id="divPosition">
+
+		<form action="" method="get">
+
+			<input type='submit' class = 'button' value ='눈인식 시작' name='btn'>
+		</form>
+
+		<form action="videos/" method="POST">
+			{% csrf_token %}
+
+			<button type='submit' class='moveBtn'>이동</button>
+		</form>
+		
+	</div>
+		
+
+
+	
+
+
+
+  </body>
+</html>
