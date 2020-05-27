@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- <div class='row'>
+    <div class='col'></div>
+    <div class='col-6'>
+        <form action='' method='post'>
+            <div class='alert alert-info'>로그인 정보입력</div>
+            {% csrf_token %}
+            <label>Username : <input type='text' name = 'Username'></label>
+            <label>Password : <input type='password' name = 'password'></label>
+            <label>Repeat Password : <input type='password' name = 'password2'></label>        </form>
+            <input type = 'submit' value='Sign up' class='btn btn-outline-info'>
+        </form>
+        </div>
+    <div class='col'></div>
+</div> -->
+<div class='continer'>
+    <h1>sign up!</h1>
+
+    <form method='POST' action ="">
+        {% csrf_token %}
+        아이디 &emsp;&emsp;&emsp;&nbsp;
+        <input name='username' type ='text'>
+        <br>
+        비밀번호 &emsp;&emsp;&nbsp;
+        <input name='password1' type='password'>
+        <br>
+        비밀번호확인 &nbsp;
+        <input name='password2' type = 'password'>
+        <br>
+        이름 &emsp;&emsp;&emsp;&emsp;&nbsp;
+        <input name='last_name' type = 'text'>
+        <br>
+        성: &emsp;&emsp;&emsp;&emsp;&nbsp;&emsp;
+        <input type='radio' name='first_name'value='남' checked>남성
+        <input type='radio' name='first_name'value='여' >여성
+        <br>
+        이메일 주소 &emsp;
+        <input name='email' type = 'text'>
+        <br>
+      
+        <input type = 'submit' class='btn btn-primary' value='sign up'>
+    </form>
+</div>
+{% endblock %}
