@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}
+{% endblock %}
+
+{% block content %}
+<!-- <div class='row'>
+    <div class='col'></div>
+    <div class='col-6'>
+        <div class='alert alert-primary' role='alert'>
+            로그인 정보 입력</div>
+        <form action='' method='post'>
+            {% csrf_token %}
+            {{form.as_p}}
+            <input type='submit' value='login' class='btn btn-primary'>
+        </form>
+    </div>
+    <div class='col'></div>
+</div> -->
+<div class='container'>
+    <h1>login</h1>
+    <form method='POST' action=''>
+        {% csrf_token %}
+        유저네임
+        <input name='username' type='text'>
+        비번
+        <input name='password' type='password'>
+        <input type='submit' class= 'btn btn-primary' value='로그인'>
+    </form>
+</div>
+{% endblock %}
