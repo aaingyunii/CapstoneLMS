@@ -10,7 +10,7 @@ def signup(request):
         if request.POST['password1'] == request.POST['password2']:
             user = User.objects.create_user(
                 username=request.POST['username'], password=request.POST['password1'],
-                    first_name=request.POST['first_name'],last_name=request.POST['last_name'],email=request.POST['email'])
+                    first_name=request.POST['last_name'],last_name=request.POST['first_name'],email=request.POST['email'])
             
             auth.login(request, user)
             return render(request, 'accounts/signup_complete.html')

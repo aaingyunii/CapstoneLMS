@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import PhotoCreate, PhotoDelete, PhotoList, PhotoDetail, PhotoUpdate 
-from photo.views import test, home
+from photo.views import webcam_test, mic_test, home
 
 
 app_name= 'photo'
@@ -11,7 +11,8 @@ urlpatterns = [
     # path('/main/',main,name='detail'),
     path('detail/<int:pk>/', PhotoDetail.as_view(), name='detail'),
     path('', PhotoList.as_view(), name='index'),
-    path('test/', test),
+    path('webcam_test/', webcam_test),
+    path('mic_test/',mic_test),
     path('home/', home),
 ]
 

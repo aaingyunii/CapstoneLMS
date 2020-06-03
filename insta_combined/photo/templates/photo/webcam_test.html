@@ -7,7 +7,14 @@
 <video autoplay="true" id="videoElement">
 </video>
 </div>
-<button id="stop">Stop Video</button>
+
+<form action="" method="get">
+  <input type='submit' class = 'button' value='Strat Test' name='eye_test'>
+  <!-- <button>Strat Test</button> -->
+</form>
+<!-- <button id="stop">Stop Video</button> -->
+
+<!--
 <script>
     var video = document.querySelector("#videoElement");
     var stopVideo = document.querySelector("#stop");
@@ -36,7 +43,9 @@
       video.srcObject = null;
     }
 </script>
+-->
 <!-- 웹캠 -->
+<!--
 <style>
   * {
     font-family: Verdana, Arial, sans-serif;
@@ -115,6 +124,9 @@
     background-color:transparent;
     padding: 0;
   }
+
+
+/* 마이크 */
 </style>
 <h1 class="center" id="headline">  Web Speech API Demonstration</h1>
 <div id="info">
@@ -311,4 +323,5 @@ function showButtons(style) {
   copy_info.style.display = 'none';
 }
 </script>
+-->
 {% endblock %}
