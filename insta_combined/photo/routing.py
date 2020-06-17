@@ -1,8 +1,10 @@
-from django.conf.urls import url
+from django.urls import path
 from . import consumers
 
 websocket_urlpatterns = [
 
-    re_path(r'ws/index/(?P<room_name>\w+)/$', consumers.ChatConsumer),
+    path('ws/index/<str:room_name>/', consumers.ChatConsumer),
 
 ]
+
+

@@ -21,24 +21,18 @@ class Photo(models.Model):
 
 class Eve(models.Model):
     # student = models.ForeignKey(User, on_delete = models.CASCADE, related_name='user')
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
     number = models.IntegerField()
     result = models.IntegerField()
     state = models.CharField(max_length=300)
     created_at = models.DateTimeField(auto_now_add=True,null=True,blank=True)
 
 class Threshold(models.Model):
-    student_id=models.ForeignKey(User,on_delete=models.CASCADE,related_name='id')
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
     open_ear=models.FloatField()
     close_ear=models.FloatField()
-    ear_thresh=models.FloatField()
+    ear_thresh=models.FloatField()  
     created_at=models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return "text : " +self.text
 
-    def student_id(self):
-        return User.objects.get(id=self.student_id)
-
-    def student_id(self,User):
-        self.student_id=User.id
 

@@ -39,7 +39,9 @@ import threading
 from .models import Eve
 from .models import Threshold
 from datetime import datetime
+from django.contrib.auth.models import User
 from django.contrib import auth
+
 
 def eye_aspect_ratio(eye) :
     A = dist.euclidean(eye[1], eye[5])
@@ -232,7 +234,13 @@ def testForThreshold():
 
     video_capture.release()
     cv2.destroyAllWindows()
-    Threshold_instance=Threshold.objects.create(open_ear=OPEN_EAR,close_ear=CLOSE_EAR,ear_thresh=EAR_THRESH, created_at=datetime.now())
+    
+    Threshold_instance=Threshold(open_ear=OPEN_EAR,close_ear=CLOSE_EAR, ear_thresh=EAR_THRESH, created_at=datetime.now(), user_id=id_user)
+    Threshold_instance.save()
+
+    # Threshold.objects.create(open_ear=OPEN_EAR,close_ear=CLOSE_EAR
+    # ,ear_thresh=EAR_THRESH, created_at=datetime.now(), student_id=user.id)
+    
     print("테스트완료")
 
     
@@ -264,10 +272,16 @@ def drowsiness():
     print("이제 시작한다!")
 
 	#1.
-    OPEN_EAR = 0 #For init_open_ear()
+    # OPEN_EAR = 0 #For init_open_ear()
+    # instance = Threshold.objects.get(EAR_THRESH)
     global EAR_THRESH  #Threashold value
-    EAR_THRESH = 0
+    # EAR_THRESH = 0
+    # instance = Threshold.objects.all().filter(user_id=id_user).values('ear_thresh')
+    instance = Threshold.objects.get(user_id=id_user)
+    print(instance)
+    print(instance.ear_thresh)
 
+    EAR_THRESH=instance.ear_thresh
 	#2.
 	#It doesn't matter what you use instead of a consecutive frame to check out drowsiness state. (ex. timer)
     EAR_CONSEC_FRAMES = 20 
@@ -297,16 +311,16 @@ def drowsiness():
 
     print("Hi4")
 
-	#9.
-    global th_open
-    th_open = Thread(target = init_open_ear)
-    print("Hi5")
-    th_open.daemon = True
-    th_open.start()
-    global th_close
-    th_close = Thread(target = init_close_ear)
-    th_close.daemon = True
-    th_close.start()
+	# #9.
+    # global th_open
+    # th_open = Thread(target = init_open_ear)
+    # print("Hi5")
+    # th_open.daemon = True
+    # th_open.start()
+    # global th_close
+    # th_close = Thread(target = init_close_ear)
+    # th_close.daemon = True
+    # th_close.start()
     
     #cv2.VideoCapture(0)에서 웹캠이 하나면 0을 이고 2개이상일 경우, 0,1,2...으로 웹캠을 설정할 수 있다.
     video_capture = cv2.VideoCapture(0)   
@@ -315,11 +329,11 @@ def drowsiness():
     while True:
         global frame
         ret, frame = video_capture.read()
-        if th_open.is_alive():
-            cv2.putText(frame, "Open your both eyes until the sound end", (10,100), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255), 2)
-        if (th_close.is_alive())&(th_open.is_alive()==False):
-            cv2.putText(frame, "Close your both eyes until the sound end", (10,100), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,0), 2)   
-        #L, gray = lr.light_removing(frame)
+        # if th_open.is_alive():
+        #     cv2.putText(frame, "Open your both eyes until the sound end", (10,100), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255), 2)
+        # if (th_close.is_alive())&(th_open.is_alive()==False):
+        #     cv2.putText(frame, "Close your both eyes until the sound end", (10,100), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,0), 2)   
+        # #L, gray = lr.light_removing(frame)
         if(int(video_capture.get(1)) % 1 == 0):
             cv2.imwrite("C:\\Users\\InKunAhn\\Documents\\GitHub\\CapstoneLMS\\frame\\%d.jpg" % count, frame)
             # print('Saved frame%d.jpg' % count)
@@ -420,16 +434,66 @@ def drowsiness():
     video_capture.release()
     cv2.destroyAllWindows()
     
-    for i in range(len(result_data)):
     
+    for i in range(len(result_data)):
+        
         if result_data[i] == 0:
-            Eve_instance = Eve.objects.create(number=i,result=result_data[i],state='power', created_at = datetime.now())
+            Eve_instance = Eve(number=i,result=result_data[i],state='power', created_at = datetime.now(),user_id=id_user)
+            Eve_instance.save()
         
         elif result_data[i] == 1:
-	        Eve_instance = Eve.objects.create(number=i,result=result_data[i],state = 'normal', created_at = datetime.now())
+            Eve_instance = Eve(number=i,result=result_data[i],state = 'normal', created_at = datetime.now(),user_id=id_user)
+            Eve_instance.save()
 
         else: 
-	        Eve_instance = Eve.objects.create(number=i,result=result_data[i],state = 'short', created_at = datetime.now())   
+            Eve_instance = Eve(number=i,result=result_data[i],state = 'short', created_at = datetime.now(),user_id=id_user)   
+            Eve_instance.save()
+
+
+
+def face_extractor(img):
+
+    gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+    faces = face_classifier.detectMultiScale(gray,1.3,5)
+
+    if faces is():
+        return None
+
+    for(x,y,w,h) in faces:
+        cropped_face = img[y:y+h, x:x+w]
+
+    return cropped_face
+
+def facePhoto():
+    
+    global face_classifier
+    face_classifier = cv2.CascadeClassifier('C:\\Users\\InKunAhn\\djangoPractice\\insta_combined\\photo\\haarcascade_frontalface_default.xml')
+
+    cap = cv2.VideoCapture(0)
+    count = 0
+    user=username_user
+
+    while True:
+        ret, frame = cap.read()
+        if face_extractor(frame) is not None:
+            count+=1
+            face = cv2.resize(face_extractor(frame),(200,200))
+
+            file_name_path = 'C:\\Users\\InKunAhn\\Documents\\GitHub\\CapstoneLMS\\identification\\'+user+'.jpg'
+            cv2.imwrite(file_name_path,face)
+
+            cv2.putText(face,str(count),(50,50),cv2.FONT_HERSHEY_COMPLEX,1,(0,255,0),2)
+            cv2.imshow('Face Cropper',face)
+        else:
+            print("Face not Found")
+            pass
+
+        if cv2.waitKey(1)==13 or count==1:
+            break
+
+    cap.release()
+    cv2.destroyAllWindows()
+    print('Colleting Samples Complete!!!')
 
 
 #### 기존 코드
@@ -492,6 +556,10 @@ class PhotoDetail(DetailView):
     #눈인식 전체 동작을 위한 것.
     def dispatch(self, request, *args, **kwargs):
         # object = self.get_object()
+        global id_user
+        id_user= request.user.id
+        print(id_user)
+
         if (request.GET.get('btn')):
             th_drow=Thread(target=drowsiness())
             print("눈인식 시작")
@@ -502,7 +570,7 @@ class PhotoDetail(DetailView):
 
             return super(PhotoDetail, self).dispatch(request, *args, **kwargs)
 
-    
+
     # def eye(request):
     #     if(request.GET.get('btn')):
     #         dr=drowsiness()
@@ -513,19 +581,32 @@ class PhotoDetail(DetailView):
 
 
 def webcam_test(request):
-
+    global id_user
+    id_user= request.user.id
+    print(id_user)
     if(request.GET.get('eye_test')):
-        th_test=Thread(target=testForThreshold)
+        th_test=Thread(target = testForThreshold)
         print("Test 시작")
         th_test.daemon=True
         th_test.start()
-
+  
     return render(request, 'photo/webcam_test.html')
+
 
 def mic_test(request):
     return render(request,'photo/mic_test.html')
 
 def home(request):
+    global username_user
+    username_user = request.user.username
+    print(username_user)
+
+    if(request.GET.get('face_photo')):
+        th_photo = Thread(target=facePhoto)
+        print("얼굴촬영 ㄱㄱ")
+        th_photo.daemon=True
+        th_photo.start()
+
     return render(request, 'photo/home.html')
 
 def index(request):
